@@ -69,8 +69,6 @@ Initial release
 
 == Usage ==
 
-### Usage
-
 **Favorite Button**
 
 The favorite button can be added automatically to the content by enabling specific post types in the plugin settings. It may also be added to template files or through the content editor using the included functions or shortcodes. The post id may be left blank in all cases if inside the loop.
