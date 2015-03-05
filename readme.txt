@@ -1,7 +1,7 @@
 === Favorites ===
 Contributors: kylephillips
 Donate link: http://favoriteposts.com/
-Tags: favorites, like, bookmark, favorite, likes, bookmarks
+Tags: favorites, like, bookmark, favorite, likes, bookmarks, favourite, favourites
 Requires at least: 3.8
 Tested up to: 4.1
 Stable tag: 1.0
