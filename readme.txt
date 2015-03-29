@@ -4,7 +4,7 @@ Donate link: http://favoriteposts.com/
 Tags: favorites, like, bookmark, favorite, likes, bookmarks, favourite, favourites
 Requires at least: 3.8
 Tested up to: 4.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -54,6 +54,10 @@ Yes, although the buttons may display the incorrect state momentarily. Button st
 2. Enable for anonymous users and save in the session or a browser cookie. Logged-in users' favorites are saved in a custom user meta field.
 
 3. Enable and display per post type, or use the functions/shortcodes to manually add to templates.
+
+4. Add a favorites button to any post type. Customize the button text and/or icon.
+
+5. Use the included functions or shortcodes to display a list of user favorites. A template function is also provided to fetch an array of user favorite post ids.
 
 
 == Changelog ==
