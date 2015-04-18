@@ -1,7 +1,7 @@
 === Favorites ===
 Contributors: kylephillips
 Donate link: http://favoriteposts.com/
-Tags: favorites, like, bookmark, favorite, likes, bookmarks, favourite, favourites
+Tags: favorites, like, bookmark, favorite, likes, bookmarks, favourite, favourites, multisite
 Requires at least: 3.8
 Tested up to: 4.2
 Stable tag: 1.0.5
@@ -29,6 +29,8 @@ Visit [favoriteposts.com](http://favoriteposts.com) for a full list of available
 
 **Designed for Developers** - Favorites works great out-of-the-box for beginners, but a full set of template functions unlocks just about any sort of custom functionality developers may need. Favorites outputs the minimum amount of markup needed, putting the style and control in your hands.
 
+**Multisite Compatible** - As of version 1.1.0, Favorites is multisite compatible. User favorites are saved on a site/blog basis, and may be retrieved and displayed across sites.
+
 For more information visit [favoriteposts.com](http://favoriteposts.com).
 
 **Important: Favorites requires WordPress version 3.8 or higher, and PHP version 5.3.2 or higher.**
@@ -46,6 +48,9 @@ For more information visit [favoriteposts.com](http://favoriteposts.com).
 = Does this worked on cached pages? =
 Yes, although the buttons may display the incorrect state momentarily. Button states are updated via an AJAX call after page load in order to accommodate cached pages. This may be noticeable on slower servers.
 
+= Is this plugin compatible with Multisite? =
+As of version 1.1.0, Favorites is compatible with multisite installations. By default, all shortcodes and template functions will pull data from the site being viewed. Specific site IDs may be passed as parameters for more control. See the documentation for more information.
+
 
 == Screenshots ==
 
@@ -61,6 +66,9 @@ Yes, although the buttons may display the incorrect state momentarily. Button st
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Favorites is now multisite compatible. See documentation for added template function and shortcode parameters.
 
 = 1.0.5 =
 * Autoloader bug fix (Thanks to Stefan Oderbolz)
@@ -85,6 +93,9 @@ Yes, although the buttons may display the incorrect state momentarily. Button st
 
 == Upgrade Notice ==
 
+= 1.1.0 =
+* Favorites is now multisite compatible. See documentation for added template function and shortcode parameters.
+
 = 1.0 =
 Initial release
 
@@ -92,11 +103,11 @@ Initial release
 
 **Favorite Button**
 
-The favorite button can be added automatically to the content by enabling specific post types in the plugin settings. It may also be added to template files or through the content editor using the included functions or shortcodes. The post id may be left blank in all cases if inside the loop.
+The favorite button can be added automatically to the content by enabling specific post types in the plugin settings. It may also be added to template files or through the content editor using the included functions or shortcodes. The post id may be left blank in all cases if inside the loop. The site id parameter is optional, for use in multisite installations (defaults to current site).
 
-* **Get function:** `get_favorites_button($post_id)`
-* **Print function:** `the_favorites_button($post_id)`
-* **Shortcode:** `[favorite_button post_id=""]`
+* **Get function:** `get_favorites_button($post_id, $site_id)`
+* **Print function:** `the_favorites_button($post_id, $site_id)`
+* **Shortcode:** `[favorite_button post_id="" site_id=""]`
 
 **Favorite Count**
 
@@ -108,9 +119,9 @@ Total favorites for each post are saved as a simple integer. If a user unfavorit
 
 **User Favorites**
 
-User favorites are stored as an array of post ids. Logged-in users' favorites are stored as a custom user meta field, while anonymous users' favorites are stored in either the session or browser cookie (configurable in the plugin settings). If the user id parameter is omitted, the favorites default to the current user.
+User favorites are stored as an array of post ids. Logged-in users' favorites are stored as a custom user meta field, while anonymous users' favorites are stored in either the session or browser cookie (configurable in the plugin settings). If the user id parameter is omitted, the favorites default to the current user. The site id parameter is optional, for use in multisite installations (defaults to current site).
 
-* **Get function (returns array of IDs):** `get_user_favorites($user_id)`
-* **Get function (returns html list):** `get_user_favorites_list($user_id)`
-* **Print function (prints an html list):** `the_user_favorites_list($user_id)`
-* **Shortcode (prints an html list, with the option of omitting links):** `[user_favorites user_id="" include_links="true"]
+* **Get function (returns array of IDs):** `get_user_favorites($user_id, $site_id)`
+* **Get function (returns html list):** `get_user_favorites_list($user_id, $site_id)`
+* **Print function (prints an html list):** `the_user_favorites_list($user_id, $site_id)`
+* **Shortcode (prints an html list, with the option of omitting links):** `[user_favorites user_id="" include_links="true" site_id=""]
