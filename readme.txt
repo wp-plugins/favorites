@@ -9,7 +9,7 @@ Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Favorites for any post type. Easily add favoriting/liking, wishlists, or any other similar functionaliyt using the developer-friendly API.
+Favorites for any post type. Easily add favoriting/liking, wishlists, or any other similar functionality using the developer-friendly API.
 
 == Description ==
 
