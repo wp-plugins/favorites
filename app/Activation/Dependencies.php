@@ -102,7 +102,12 @@ class Dependencies {
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'favorite' => $this->settings_repo->buttonText(),
-				'favorited' => $this->settings_repo->buttonTextFavorited()
+				'favorited' => $this->settings_repo->buttonTextFavorited(),
+				'includecount' => $this->settings_repo->includeCountInButton(),
+				'indicate_loading' => $this->settings_repo->includeLoadingIndicator(),
+				'loading_text' => $this->settings_repo->loadingText(),
+				'loading_image' => $this->settings_repo->loadingImage(),
+				'loading_image_active' => $this->settings_repo->loadingImage('active')
 			)
 		);
 	}

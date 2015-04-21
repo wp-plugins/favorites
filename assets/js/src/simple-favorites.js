@@ -73,18 +73,34 @@ function update_buttons(favorites)
 		
 		var postid = $(this).data('postid');
 		var siteid = $(this).data('siteid');
+		var favorite_count = $(this).data('favoritecount');
+		var html = "";
 		
 		// Find the Site's Favorites Array
 		for ( var i = 0; i < favorites.length; i++ ){
 			if ( favorites[i].site_id !== siteid ) continue;
 			if ( inObject(postid, favorites[i].site_favorites) ){
-				$(this).addClass('active').html(simple_favorites.favorited);
+				html = add_favorite_count_to_button(simple_favorites.favorited, favorite_count);
+				$(this).addClass('active').html(html);
 			} else {
-				$(this).removeClass('active').html(simple_favorites.favorite);
+				html = add_favorite_count_to_button(simple_favorites.favorite, favorite_count);
+				$(this).removeClass('active').html(html);
 			}
+			$(this).removeClass('loading');
 		}
 
 	});
+}
+
+/**
+* Add the favorite count to the button text if enabled
+*/
+function add_favorite_count_to_button(html, favorite_count)
+{
+	if ( simple_favorites.includecount === '1' ){
+		html += ' <span class="simplefavorite-button-count">' + favorite_count + '<span>';
+	}
+	return html;
 }
 
 /**
@@ -145,6 +161,7 @@ function get_single_list(list, user_id, site_id, links)
 $(document).on('click', '.simplefavorite-button', function(e){
 	e.preventDefault();
 	var button = $(this);
+	$(this).addClass('loading');
 	submit_favorite(button);
 });
 
@@ -153,16 +170,26 @@ function submit_favorite(button)
 {
 	var post_id = $(button).data('postid');
 	var site_id = $(button).data('siteid');
+	var favorite_count = parseInt($(button).attr('data-favoritecount'));
 
 	var status = 'inactive';
+	var html = "";
+	var original_html = "";
 
 	if ( $(button).hasClass('active') ) {
 		$(button).removeClass('active');
-		$(button).html(simple_favorites.favorite);
+		if ( favorite_count - 1 < 0 ) favorite_count = 1;
+		$(button).attr('data-favoritecount', favorite_count - 1);
+		original_html = add_favorite_count_to_button(simple_favorites.favorite, favorite_count - 1);
+		html = add_loading_indication(original_html, status);
+		$(button).html(html);
 	} else {
-		var status = 'active';
+		status = 'active';
 		$(button).addClass('active');
-		$(button).html(simple_favorites.favorited);
+		$(button).attr('data-favoritecount', favorite_count + 1);
+		original_html = add_favorite_count_to_button(simple_favorites.favorited, favorite_count + 1);
+		html = add_loading_indication(original_html, status);
+		$(button).html(html);
 	}
 
 	$.ajax({
@@ -178,9 +205,24 @@ function submit_favorite(button)
 		},
 		success: function(data){
 			if ( data.status !== 'success' ) console.log(data.message);
-			console.log(data);
+			$(button).removeClass('loading');
+			$(button).html(original_html);  // TODO: save original html, replace here
 		}
 	});
+}
+
+/**
+* Add loading indication
+* @return html
+*/
+function add_loading_indication(html, status)
+{
+	if ( simple_favorites.indicate_loading !== '1' ) return html;
+	if ( status === 'active' ){
+		return simple_favorites.loading_text + simple_favorites.loading_image_active;
+	} else {
+		return simple_favorites.loading_text + simple_favorites.loading_image;
+	}
 }
 
 

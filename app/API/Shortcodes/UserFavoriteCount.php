@@ -1,8 +1,6 @@
 <?php namespace SimpleFavorites\API\Shortcodes;
 
-use SimpleFavorites\Entities\User\UserFavorites;
-
-class UserFavoritesShortcode {
+class UserFavoriteCount {
 
 	/**
 	* Shortcode Options
@@ -18,7 +16,7 @@ class UserFavoritesShortcode {
 
 	public function __construct()
 	{
-		add_shortcode('user_favorites', array($this, 'renderView'));
+		add_shortcode('user_favorite_count', array($this, 'renderView'));
 	}
 
 	/**
@@ -29,7 +27,6 @@ class UserFavoritesShortcode {
 		$this->options = shortcode_atts(array(
 			'user_id' => '',
 			'site_id' => '',
-			'include_links' => 'true',
 			'post_types' => ''
 		), $options);
 	}
@@ -52,13 +49,10 @@ class UserFavoritesShortcode {
 	{
 		$this->setOptions($options);
 		$this->parsePostTypes();
-		
-		$this->options['include_links'] = ( $this->options['include_links'] == 'true' ) ? true : false;
-		if ( $this->options['user_id'] == "" ) $this->options['user_id'] = null;
-		if ( $this->options['site_id'] == "" ) $this->options['site_id'] = null;
 
-		$favorites = new UserFavorites($this->options['user_id'], $this->options['site_id'], $this->options['include_links'], $this->filters);
-		return $favorites->getFavoritesList();
+		if ( $this->options['user_id'] == '' ) $this->options['user_id'] = null;
+		
+		return get_user_favorites_count($this->options['user_id'], $this->options['site_id'], $this->options['post_types']);
 	}
 
 }

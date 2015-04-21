@@ -67,6 +67,13 @@ As of version 1.1.0, Favorites is compatible with multisite installations. By de
 
 == Changelog ==
 
+= 1.1.1 =
+* Optional filtering added to favorite list template functions. The functions now accept an array of arguments for fine-tuned favorite lists. Visit the documentation for more information.
+* An optional "post_type" parameter has been added to the user_favorites shortcode. The parameter allows for filtering of the generated list by post types, and will accept a comma separated list of post types
+* Option added to include post favorite count in the button (view settings > favorites > display to enable)
+* Button loading state option added (view settings > favorites > display to enable)
+* Added template function and shortcode for displaying total number of favorites by user (see documentation for more options)
+
 = 1.1.0 =
 * Favorites is now multisite compatible. See documentation for added template function and shortcode parameters.
 
@@ -93,6 +100,9 @@ As of version 1.1.0, Favorites is compatible with multisite installations. By de
 
 == Upgrade Notice ==
 
+= 1.1.1 =
+* Optional filters added to favorite list functionality. Visit the documentation page for more information.
+
 = 1.1.0 =
 * Favorites is now multisite compatible. See documentation for added template function and shortcode parameters.
 
@@ -109,13 +119,20 @@ The favorite button can be added automatically to the content by enabling specif
 * **Print function:** `the_favorites_button($post_id, $site_id)`
 * **Shortcode:** `[favorite_button post_id="" site_id=""]`
 
-**Favorite Count**
+**Favorite Count (by Post)**
 
 Total favorites for each post are saved as a simple integer. If a user unfavorites a post, this count is updated. Anonymous users' favorites count towards the total by default, but may be disabled via the plugin settings. The post id may be left blank in all cases if inside the loop.
 
 * **Get function:** `get_favorites_count($post_id)`
 * **Print function:** `the_favorites_count($post_id)`
 * **Shortcode:** `[favorite_count post_id=""]`
+
+**Favorite Count (by User)**
+Displays the total number of favorites a user has favorited. Template functions accept the same filters parameter as the user favorites functions.
+
+* **Get function:** `get_user_favorites_count($user_id, $site_id, $filters)`
+* **Print function:** `the_user_favorites_count($user_id, $site_id, $filters)`
+* **Shortcode:** `[user_favorites user_id="" site_id="" post_types=""]`
 
 **User Favorites**
 
