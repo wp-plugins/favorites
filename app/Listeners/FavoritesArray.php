@@ -1,12 +1,14 @@
-<?php namespace SimpleFavorites\Forms;
+<?php 
+
+namespace SimpleFavorites\Listeners;
 
 use SimpleFavorites\Entities\User\UserRepository;
 
 /**
 * Return an array of user's favorited posts
 */
-class FavoritesArrayHandler {
-
+class FavoritesArray extends AJAXListenerBase
+{
 	/**
 	* User Repository
 	*/
@@ -18,12 +20,11 @@ class FavoritesArrayHandler {
 	*/
 	private $favorites;
 
-
 	public function __construct()
 	{
 		$this->user = new UserRepository;
 		$this->setFavorites();
-		$this->sendResponse();
+		$this->response(array('status'=>'success', 'favorites' => $this->favorites));
 	}
 
 	/**
@@ -31,15 +32,7 @@ class FavoritesArrayHandler {
 	*/
 	private function setFavorites()
 	{
-		$this->favorites = $this->user->getAllFavorites();
+		$favorites = $this->user->formattedFavorites();
+		$this->favorites = $favorites;
 	}
-
-	/**
-	* Send the Response
-	*/
-	private function sendResponse()
-	{
-		return wp_send_json(array('status'=>'success', 'favorites'=>$this->favorites));
-	}
-
 }

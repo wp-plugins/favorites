@@ -1,10 +1,15 @@
-<?php namespace SimpleFavorites\Entities\User;
+<?php 
+
+namespace SimpleFavorites\Entities\User;
 
 use SimpleFavorites\Entities\User\UserRepository;
 use SimpleFavorites\Entities\Favorite\FavoriteFilter;
 use SimpleFavorites\Helpers;
+use SimpleFavorites\Entities\Favorite\FavoriteButton;
+use SimpleFavorites\Config\SettingsRepository;
 
-class UserFavorites {
+class UserFavorites 
+{
 
 	/**
 	* User ID
@@ -31,18 +36,23 @@ class UserFavorites {
 	private $filters;
 
 	/**
-	* Settings Repository
+	* User Repository
 	*/
 	private $user_repo;
 
+	/**
+	* Settings Repository
+	*/
+	private $settings_repo;
 
-	public function __construct($user_id, $site_id, $links = false, $filters = null)
+	public function __construct($user_id = null, $site_id = null, $links = false, $filters = null)
 	{
 		$this->user_id = $user_id;
 		$this->site_id = $site_id;
 		$this->links = $links;
 		$this->filters = $filters;
 		$this->user_repo = new UserRepository;
+		$this->settings_repo = new SettingsRepository;
 	}
 
 	/**
@@ -52,6 +62,18 @@ class UserFavorites {
 	{
 		$favorites = $this->user_repo->getFavorites($this->user_id, $this->site_id);
 		if ( isset($this->filters) && is_array($this->filters) ) $favorites = $this->filterFavorites($favorites);
+		return $this->removeInvalidFavorites($favorites);
+	}
+
+	/**
+	* Remove non-existent or non-published favorites
+	* @param array $favorites
+	*/
+	private function removeInvalidFavorites($favorites)
+	{
+		foreach($favorites as $key => $favorite){
+			if ( !$this->postExists($favorite) ) unset($favorites[$key]);
+		}
 		return $favorites;
 	}
 
@@ -68,27 +90,49 @@ class UserFavorites {
 
 	/**
 	* Return an HTML list of favorites for specified user
+	* @param $include_button boolean - whether to include the favorite button
 	*/
-	public function getFavoritesList()
+	public function getFavoritesList($include_button = false)
 	{
 		if ( is_null($this->site_id) || $this->site_id == '' ) $this->site_id = get_current_blog_id();
+		
 		$favorites = $this->getFavoritesArray();
-
-		if ( $favorites ){
-			if ( is_multisite() ) switch_to_blog($this->site_id);
-			$out = '<ul class="favorites-list" data-userid="' . $this->user_id . '" data-links="true" data-siteid="' . $this->site_id . '">';
-			foreach ( $favorites as $key => $favorite ){
-				$out .= '<li>';
-				if ( $this->links ) $out .= '<a href="' . get_permalink($favorite) . '">';
-				$out .= get_the_title($favorite);
-				if ( $this->links ) $out .= '</a>';
-				$out .= '</li>';
+		$no_favorites = $this->settings_repo->noFavoritesText();
+		
+		if ( is_multisite() ) switch_to_blog($this->site_id);
+		
+		$out = '<ul class="favorites-list" data-userid="' . $this->user_id . '" data-links="true" data-siteid="' . $this->site_id . '" ';
+		$out .= ( $include_button ) ? 'data-includebuttons="true"' : 'data-includebuttons="false"';
+		$out .= ( $this->links ) ? ' data-includelinks="true"' : ' data-includelinks="false"';
+		$out .= ' data-nofavoritestext="' . $no_favorites . '"';
+		$out .= '>';
+		foreach ( $favorites as $key => $favorite ){
+			
+			$out .= '<li data-postid="' . $favorite . '">';
+			if ( $include_button ) $out .= '<p>';
+			if ( $this->links ) $out .= '<a href="' . get_permalink($favorite) . '">';
+			$out .= get_the_title($favorite);
+			if ( $this->links ) $out .= '</a>';
+			if ( $include_button ){
+				$button = new FavoriteButton($favorite, $this->site_id);
+				$out .= '</p><p>';
+				$out .= $button->display(false) . '</p>';
 			}
-			$out .= '</ul>';
-			if ( is_multisite() ) restore_current_blog();
-			return $out;
+			$out .= '</li>';
 		}
-		return false;
+		if ( empty($favorites) ) $out .= '<li data-postid="0" data-nofavorites>' . $no_favorites . '</li>';
+		$out .= '</ul>';
+		if ( is_multisite() ) restore_current_blog();
+		return $out;
+	}
+
+	/**
+	* Check if post exists and is published
+	*/
+	private function postExists($id)
+	{
+		$status = get_post_status($id);
+		return( !$status || $status !== 'publish') ? false : true;
 	}
 
 }

@@ -1,6 +1,9 @@
-<?php namespace SimpleFavorites\API\Shortcodes;
+<?php 
 
-class UserFavoriteCount {
+namespace SimpleFavorites\API\Shortcodes;
+
+class UserFavoriteCount 
+{
 
 	/**
 	* Shortcode Options
@@ -52,7 +55,7 @@ class UserFavoriteCount {
 
 		if ( $this->options['user_id'] == '' ) $this->options['user_id'] = null;
 		
-		return get_user_favorites_count($this->options['user_id'], $this->options['site_id'], $this->options['post_types']);
+		return get_user_favorites_count($this->options['user_id'], $this->options['site_id'], $this->filters, true);
 	}
 
 }

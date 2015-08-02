@@ -2,7 +2,7 @@
 
 namespace SimpleFavorites\API\Shortcodes;
 
-class FavoriteCountShortcode 
+class ClearFavoritesShortcode
 {
 
 	/**
@@ -13,7 +13,7 @@ class FavoriteCountShortcode
 
 	public function __construct()
 	{
-		add_shortcode('favorite_count', array($this, 'renderView'));
+		add_shortcode('clear_favorites_button', array($this, 'renderView'));
 	}
 
 	/**
@@ -22,19 +22,19 @@ class FavoriteCountShortcode
 	private function setOptions($options)
 	{
 		$this->options = shortcode_atts(array(
-			'post_id' => '',
-			'site_id' => ''
+			'site_id' => null,
+			'text' => null
 		), $options);
 	}
 
 	/**
-	* Render the count
+	* Render the Button
 	* @param $options, array of shortcode options
 	*/
 	public function renderView($options)
 	{
 		$this->setOptions($options);
-		return get_favorites_count($this->options['post_id'], $this->options['site_id']);
+		return get_clear_favorites_button($this->options['site_id'], $this->options['text']);
 	}
 
 }

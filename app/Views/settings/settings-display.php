@@ -38,6 +38,12 @@
 	</td>
 </tr>
 <tr valign="top">
+	<th scope="row"><?php _e('Clear Favorites Button Text', 'simplefavorites'); ?>*</th>
+	<td>
+		<input type="text" name="simplefavorites_display[clearfavorites]" value="<?php echo $this->settings_repo->clearFavoritesText(); ?>" />
+	</td>
+</tr>
+<tr valign="top">
 	<th scope="row"><?php _e('Favorite Count', 'simplefavorites'); ?></th>
 	<td>
 		<label>
@@ -72,6 +78,12 @@
 				</label>
 			</p>
 		</div>
+	</td>
+</tr>
+<tr valign="top">
+	<th scope="row"><?php _e('No Favorites Text', 'simplefavorites'); ?>*</th>
+	<td>
+		<input type="text" name="simplefavorites_display[nofavorites]" value="<?php echo $this->settings_repo->noFavoritesText(); ?>" />
 	</td>
 </tr>
 <tr valign="top">

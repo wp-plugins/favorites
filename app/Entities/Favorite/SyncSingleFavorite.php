@@ -1,12 +1,15 @@
-<?php namespace SimpleFavorites\Entities\Favorite;
+<?php 
+
+namespace SimpleFavorites\Entities\Favorite;
 
 use SimpleFavorites\Entities\User\UserRepository;
 use SimpleFavorites\Helpers;
 
 /**
-* Sync a favorite to a given save type
+* Sync a single favorite to a given save type
 */
-class SyncUserFavorite {
+class SyncSingleFavorite 
+{
 
 	/**
 	* The Post ID
@@ -22,7 +25,6 @@ class SyncUserFavorite {
 	* User Repository
 	*/
 	private $user;
-
 
 	public function __construct($post_id, $site_id)
 	{
@@ -70,8 +72,8 @@ class SyncUserFavorite {
 		$favorites = $this->user->getAllFavorites($this->site_id);
 		foreach($favorites as $key => $site_favorites){
 			if ( $site_favorites['site_id'] !== $this->site_id ) continue;
-			foreach($site_favorites['site_favorites'] as $k => $fav){
-				if ( $fav == $this->post_id ) unset($favorites[$key]['site_favorites'][$k]);
+			foreach($site_favorites['posts'] as $k => $fav){
+				if ( $fav == $this->post_id ) unset($favorites[$key]['posts'][$k]);
 			}
 		}
 		$this->updateUserMeta($favorites);
@@ -87,12 +89,12 @@ class SyncUserFavorite {
 		if ( !Helpers::siteExists($this->site_id, $favorites) ){
 			$favorites[] = array(
 				'site_id' => $this->site_id,
-				'site_favorites' => array()
+				'posts' => array()
 			);
 		}
 		foreach($favorites as $key => $site_favorites){
 			if ( $site_favorites['site_id'] !== $this->site_id ) continue;
-			$favorites[$key]['site_favorites'][] = $this->post_id;
+			$favorites[$key]['posts'][] = $this->post_id;
 		}
 		$this->updateUserMeta($favorites);
 		return $favorites;

@@ -1,9 +1,12 @@
-<?php namespace SimpleFavorites\Forms;
+<?php 
+
+namespace SimpleFavorites\Listeners;
 
 /**
 * Creates a Nonce for Cached Pages
 */
-class NonceHandler {
+class NonceHandler 
+{
 
 	public function __construct()
 	{

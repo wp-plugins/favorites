@@ -54,7 +54,7 @@ As of version 1.1.0, Favorites is compatible with multisite installations. By de
 
 == Screenshots ==
 
-1. Developer-friendly – easily unenqueue styles and scripts if you are combining and minifying your own. 
+1. Developer-friendly – easily unenqueue styles if you are combining and minifying your own. 
 
 2. Enable for anonymous users and save in the session or a browser cookie. Logged-in users' favorites are saved in a custom user meta field.
 
@@ -66,6 +66,18 @@ As of version 1.1.0, Favorites is compatible with multisite installations. By de
 
 
 == Changelog ==
+
+= 1.2.0 =
+* Added functionality to display users who have favorited a post. Use the shortcode [post_favorites] or one of the two new template functions: get_users_who_favorited_post or the_users_who_favorited_post. View the plugin website for options and usage examples.
+* Added shortcode and template functions to display a "Clear Favorites" button. Button clears all user favorites when clicked.
+* Added developer hooks for before and after a post has been favorited.
+* Added developer Javascript callback functions for after the page has loaded, and after a favorite has been submitted.
+* Option added to include favorite button in generated list (see "Other Notes" tab or plugins website for template functions and shortcode)
+* Option added to customize text that displays in lists when the user has no favorites (visit settings > favorites > display to customize the text)
+* Post type(s) parameter added to get_user_favorites_count template function and user_favorite_count shortcode.
+* User favorite count now updated dynamically (may require a cache reset if page cache is enabled)
+* Bug fix - Invalid posts removed from user favorites (trashed/unpublished posts).
+* Other various enhancements and minor bug fixes
 
 = 1.1.4 =
 * Fixed bug that allowed multiple button submissions before the previous was processed
@@ -109,6 +121,9 @@ As of version 1.1.0, Favorites is compatible with multisite installations. By de
 
 == Upgrade Notice ==
 
+= 1.2.0 =
+* Many enhancements and developer/theme features have been added. If page cache is enabled on your site, it may be beneficial to reset the cache. Some generated HTML elements are now output with data attributes that enable dynamic updates. If the cached HTML does not have these data attributes, errors may occur.
+
 = 1.1.3 =
 * Option added to hide loading indication on page load. By default, loading indication is turned off. To turn loading indication on, visit settings > favorites > display, and select the checkbox labeld "include loading indicator image on page load"
 
@@ -151,6 +166,23 @@ Displays the total number of favorites a user has favorited. Template functions 
 User favorites are stored as an array of post ids. Logged-in users' favorites are stored as a custom user meta field, while anonymous users' favorites are stored in either the session or browser cookie (configurable in the plugin settings). If the user id parameter is omitted, the favorites default to the current user. The site id parameter is optional, for use in multisite installations (defaults to current site).
 
 * **Get function (returns array of IDs):** `get_user_favorites($user_id, $site_id)`
-* **Get function (returns html list):** `get_user_favorites_list($user_id, $site_id)`
-* **Print function (prints an html list):** `the_user_favorites_list($user_id, $site_id)`
-* **Shortcode (prints an html list, with the option of omitting links):** `[user_favorites user_id="" include_links="true" site_id=""]
+* **Get function (returns html list):** `get_user_favorites_list($user_id, $site_id, $include_links, $filters, $include_button)`
+* **Print function (prints an html list):** `the_user_favorites_list($user_id, $site_id, $include_links, $filters, $include_button)`
+* **Shortcode (prints an html list, with the option of omitting links):** `[user_favorites user_id="" include_links="true" site_id="" include_buttons="false" post_types="post"]
+
+**List Users Who Have Favorited a Post**
+
+Display a list of users who have favorited a specific post. If the user id parameter is omitted, the favorites default to the current user. The site id parameter is optional, for use in multisite installations (defaults to current site). The get function returns an array of user objects.
+
+* **Get function (returns array of User Objects):** `get_users_who_favorited_post($post_id, $site_id)`
+* **Print function (prints an html list):** `the_users_who_favorited_post($post_id = null, $site_id = null, $separator = 'list', $include_anonymous = true, $anonymous_label = 'Anonymous Users', $anonymous_label_single = 'Anonymous User')`
+* **Shortcode (prints an html list):** `[post_favorites post_id="" site_id="" separator="list" include_anonymous="true" anonymous_label="Anonymous Users" anonymous_label_single="Anonymous User"]
+
+
+**Clear Favorites Button**
+
+Displays a button that allows users to clear all of their favorites.
+
+* **Get function:** `get_clear_favorites_button($site_id, $text)`
+* **Print function:** `the_clear_favorites_button($site_id, $text)`
+* **Shortcode:** `[clear_favorites_button site_id="" text="Clear Favorites"]

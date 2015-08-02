@@ -1,8 +1,12 @@
-<?php namespace SimpleFavorites;
+<?php 
+
+namespace SimpleFavorites;
+
 /**
 * Static Helper Methods
 */
-class Helpers {
+class Helpers 
+{
 
 	/**
 	* Plugin Root Directory
@@ -79,7 +83,7 @@ class Helpers {
 	public static function pluckSiteFavorites($site_id, $all_favorites)
 	{
 		foreach($all_favorites as $site_favorites){
-			if ( $site_favorites['site_id'] == $site_id ) return $site_favorites['site_favorites'];
+			if ( $site_favorites['site_id'] == $site_id && isset($site_favorites['posts']) ) return $site_favorites['posts'];
 		}
 		return array();
 	}

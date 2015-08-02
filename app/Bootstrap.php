@@ -1,14 +1,18 @@
-<?php namespace SimpleFavorites;
+<?php 
+
+namespace SimpleFavorites;
+
 /**
 * Plugin Bootstrap
 */
-class Bootstrap {
+class Bootstrap 
+{
 
 	public function __construct()
 	{
 		$this->init();
 		add_action( 'init', array($this, 'startSession') );
-		add_filter( 'plugin_action_links_' . 'simple-favorites/simple-favorites.php', array($this, 'settingsLink' ) );
+		add_filter( 'plugin_action_links_' . 'favorites/favorites.php', array($this, 'settingsLink' ) );
 		add_action( 'plugins_loaded', array($this, 'addLocalization') );
 	}
 
@@ -21,14 +25,15 @@ class Bootstrap {
 		new Activation\Activate;
 		new Activation\Dependencies;
 		new Entities\Post\PostHooks;
-		new Forms\Handlers;
+		new Events\RegisterPublicEvents;
 		new Entities\Post\PostMeta;
 		new API\Shortcodes\ButtonShortcode;
 		new API\Shortcodes\FavoriteCountShortcode;
 		new API\Shortcodes\UserFavoritesShortcode;
 		new API\Shortcodes\UserFavoriteCount;
+		new API\Shortcodes\PostFavoritesShortcode;
+		new API\Shortcodes\ClearFavoritesShortcode;
 	}
-
 
 	/**
 	* Add a link to the settings on the plugin page
@@ -41,7 +46,6 @@ class Bootstrap {
 		array_unshift($links, $settings_link);
 		return $links; 
 	}
-
 
 	/**
 	* Localization Domain
@@ -61,7 +65,5 @@ class Bootstrap {
 	{
 		if ( !session_id() ) session_start();
 	}
-
-
 
 }
